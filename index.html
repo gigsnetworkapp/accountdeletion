@@ -221,13 +221,17 @@
     </div>
     
     <h1>Delete Account</h1>
+    <p style="font-size: 13px; font-weight: 500; color: var(--primary); margin-top: -8px; margin-bottom: 24px;">Official Workforce Account Deletion Page</p>
     
     <!-- Step 1: Phone Number -->
     <div id="step-phone">
       <p>Enter your registered phone number to begin the account deletion process.</p>
       <div class="input-group">
-        <label for="phone">Phone Number (with Country Code)</label>
-        <input type="tel" id="phone" placeholder="+91 9876543210" autocomplete="tel">
+        <label for="phone">Mobile Number</label>
+        <div style="display: flex; align-items: center; border: 1px solid var(--border); border-radius: 8px; background: #fff; overflow: hidden; transition: border-color 0.2s;">
+          <span style="padding: 12px 12px; background: #f8fafc; border-right: 1px solid var(--border); font-size: 16px; color: var(--text-secondary); font-weight: 500;">+91</span>
+          <input type="tel" id="phone" placeholder="9876543210" autocomplete="tel" style="border: none; border-radius: 0; outline: none; flex: 1;">
+        </div>
       </div>
       <div id="recaptcha-container"></div>
       <button id="btn-send-otp" onclick="sendOTP()">
@@ -290,6 +294,11 @@
     <!-- Global Error Message -->
     <div id="error-message" class="error-msg"></div>
 
+    <div style="margin-top: 24px; font-size: 13px; color: var(--text-secondary); text-align: center; line-height: 1.6;">
+      By continuing, you agree to our <br/>
+      <a href="https://gigsnetworkapp.github.io/termsandprivacy/terms.html" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 500;">Terms of Service</a> and 
+      <a href="https://gigsnetworkapp.github.io/termsandprivacy/privacy.html" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 500;">Privacy Policy</a>
+    </div>
   </div>
 
   <script>
@@ -362,10 +371,14 @@
 
     // --- Step 1: Send OTP ---
     async function sendOTP() {
-      const phoneNumber = document.getElementById('phone').value.trim();
+      let phoneNumber = document.getElementById('phone').value.trim();
       if (!phoneNumber) {
         showError("Please enter your phone number.");
         return;
+      }
+      
+      if (!phoneNumber.startsWith('+')) {
+        phoneNumber = '+91' + phoneNumber;
       }
       
       hideError();
@@ -422,7 +435,7 @@
         // Revert to phone step or just show error and sign out
         auth.signOut();
         showStep('step-phone'); // Go back to beginning
-        showError(error.message || "Action Denied: You cannot delete your account at this time (e.g., active jobs).");
+        showError(error.message || "Action Denied: You cannot delete your account at this time because you might have any active enrollments or active jobs posted.");
       }
     }
 
