@@ -419,10 +419,10 @@
         showStep('step-warning');
       } catch (error) {
         console.error(error);
-        showError(error.message || "Action Denied: You cannot delete your account at this time (e.g., active jobs).");
         // Revert to phone step or just show error and sign out
         auth.signOut();
         showStep('step-phone'); // Go back to beginning
+        showError(error.message || "Action Denied: You cannot delete your account at this time (e.g., active jobs).");
       }
     }
 
